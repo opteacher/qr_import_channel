@@ -1,0 +1,3 @@
+[submodule "src/lib/frontend-library"]
+	path = src/lib/frontend-library
+	url = https://github.com/opteacher/frontend-library.git
