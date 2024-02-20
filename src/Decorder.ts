@@ -1,7 +1,6 @@
 import { Ref } from 'vue'
 import {
   addEquation,
-  assemblePayload,
   Descriptor,
   isDetermined,
   individualSlicesInStore,
@@ -132,7 +131,6 @@ export interface DecoderResult {
   determinedSlices: () => number[]
   callbackFunction: (data: string) => void
   rawDataRateInBitsPerSeconds: number
-  getPayload: () => Blob | null
   totalSlices: number
   lastSliceReceivedOn?: number
 }
@@ -153,10 +151,6 @@ export const useDecoder = (state: Ref<sliceReducerState>): DecoderResult => {
     } catch (err) {}
   }
 
-  const getPayload = (): Blob | null => {
-    return state.value.descriptor ? assemblePayload(state.value.store, state.value.descriptor) : null
-  }
-
   const rawDataRate = calculateBitsPerSecond(state.value.rawDataRateBuffer)
 
   setInterval(() => {
@@ -172,7 +166,6 @@ export const useDecoder = (state: Ref<sliceReducerState>): DecoderResult => {
     determinedSlices: () => determinedSliceIndices(state.value.store),
     callbackFunction: callbackFunction,
     rawDataRateInBitsPerSeconds: rawDataRate,
-    lastSliceReceivedOn: state.value.lastSliceReceivedOn === 0 ? undefined : state.value.lastSliceReceivedOn,
-    getPayload
+    lastSliceReceivedOn: state.value.lastSliceReceivedOn === 0 ? undefined : state.value.lastSliceReceivedOn
   }
 }
