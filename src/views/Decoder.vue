@@ -83,11 +83,7 @@ onMounted(async () => {
         deviceId: selMdaDev.value
       },
       vdoReceiver,
-      (data: string) => {
-        if (data) {
-          callbackFunction(data)
-        }
-      }
+      callbackFunction
     )
   }
 })

@@ -137,6 +137,9 @@ export interface DecoderResult {
 
 export const useDecoder = (state: Ref<sliceReducerState>): DecoderResult => {
   const callbackFunction = (data: string) => {
+    if (!data) {
+      return
+    }
     try {
       const slice = unmarshalSlice(data)
       state.value = sliceReducer(state.value, {
