@@ -1,14 +1,43 @@
 <template>
-  <a-space>
-    <a-upload name="file" :action="onFileUpload" :showUploadList="false" :customRequest="() => ''">
-      <a-button>
-        <upload-outlined />
-        点击上传
-      </a-button>
-    </a-upload>
-    <a-typography-text v-if="tsfFile">{{ tsfFile.name }}</a-typography-text>
-  </a-space>
-  <a-qrcode v-if="data" :size="600" error-level="H" :value="data" />
+  <a-layout class="h-full">
+    <a-layout-header class="bg-white">
+      <a-upload
+        name="file"
+        :action="onFileUpload"
+        :showUploadList="false"
+        :customRequest="() => ''"
+      >
+        <a-button type="primary">
+          <upload-outlined />
+          上传文件夹
+        </a-button>
+      </a-upload>
+      <a-typography-text v-if="tsfFile" class="ml-3">{{ tsfFile.name }}</a-typography-text>
+    </a-layout-header>
+    <a-layout class="h-full">
+      <a-layout-sider :width="300" theme="light" class="p-3">
+        <a-list class="h-full" item-layout="horizontal" :data-source="files">
+          <template #renderItem="{ item }">
+            <a-list-item>
+              <a-list-item-meta
+                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+              >
+                <template #title>
+                  <a href="https://www.antdv.com/">{{ item.title }}</a>
+                </template>
+                <template #avatar>
+                  <a-avatar src="https://joeschmoe.io/api/v1/random" />
+                </template>
+              </a-list-item-meta>
+            </a-list-item>
+          </template>
+        </a-list>
+      </a-layout-sider>
+      <a-layout-content>
+        <a-qrcode v-if="data" :size="500" error-level="H" :value="data" />
+      </a-layout-content>
+    </a-layout>
+  </a-layout>
 </template>
 
 <script setup lang="ts">
@@ -20,7 +49,7 @@ import {
   marshalDescriptor,
   marshalSlice
 } from '@/FileUtils'
-import { UploadOutlined } from '@ant-design/icons-vue'
+import { UploadOutlined, FolderViewOutlined } from '@ant-design/icons-vue'
 import { onMounted, ref } from 'vue'
 
 const tsfFile = ref<File | null>(null)
@@ -31,6 +60,7 @@ const processing = ref<boolean>(false)
 const count = ref<number>(0)
 const sliceCount = ref<number>(0)
 const data = ref<string>('')
+const files = ref<File[]>([])
 
 onMounted(() => {
   setInterval(async () => {
