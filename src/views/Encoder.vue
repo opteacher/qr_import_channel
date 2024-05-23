@@ -13,20 +13,27 @@
         </a-button>
       </a-upload> -->
       <a-space>
+        <a-button type="primary">
+          <template #icon><UploadOutlined /></template>
+          上传文件
+        </a-button>
         <a-button type="primary" @click="onUploadClick">
           <template #icon><upload-outlined /></template>
           上传文件夹
         </a-button>
         <a-input-group compact>
           <template v-if="playing">
-            <a-button danger @click="() => { playing = false }">
+            <a-button danger @click="() => setProp($data, 'playing', false)">
               <template #icon><CloseCircleFilled /></template>
             </a-button>
-            <a-button :type="paused ? 'primary' : 'default'" @click="() => { paused = !paused }">
+            <a-button
+              :type="paused ? 'primary' : 'default'"
+              @click="() => setProp($data, 'paused', !paused)"
+            >
               <template #icon><PauseCircleFilled /></template>
             </a-button>
           </template>
-          <a-button v-else type="primary" ghost @click="() => { playing = true; paused = false }">
+          <a-button v-else type="primary" ghost @click="onPlayClick">
             <template #icon><PlayCircleFilled /></template>
           </a-button>
         </a-input-group>
@@ -93,8 +100,9 @@ import {
   PauseCircleFilled,
   CloseCircleFilled
 } from '@ant-design/icons-vue'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref } from 'vue'
 import { groupBy } from 'lodash'
+import { setProp } from '@lib/utils'
 
 const tsfFile = ref<File | null>(null)
 const sha256 = ref<string>('')
@@ -106,8 +114,8 @@ const totalSlices = ref<number>(0)
 const sliceCount = ref<number>(0)
 const data = ref<string>('')
 const files = ref<(FileSystemHandle & { fileNum?: number; fileSize?: number })[]>([])
-const playing = ref<false>(false)
-const paused = ref<false>(false)
+const playing = ref<boolean>(false)
+const paused = ref<boolean>(false)
 
 onMounted(() => {
   setInterval(async () => {
@@ -168,5 +176,9 @@ async function onFileClick(file: FileSystemHandle & { fileNum?: number; fileSize
   totalSlices.value = 0
   sliceCount.value = 0
   data.value = ''
+}
+function onPlayClick() {
+  playing.value = true
+  paused.value = false
 }
 </script>

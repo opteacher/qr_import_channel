@@ -9,13 +9,13 @@
         :style="{ lineHeight: '64px' }"
       >
         <a-menu-item key="Home">
-          <router-link to="/home">主页</router-link>
+          <router-link to="/qr_import_channel/home">主页</router-link>
         </a-menu-item>
         <a-menu-item key="Encoder">
-          <router-link to="/encoder">编码器</router-link>
+          <router-link to="/qr_import_channel/encoder">编码器</router-link>
         </a-menu-item>
         <a-menu-item key="Decoder">
-          <router-link to="/decoder">解码器</router-link>
+          <router-link to="/qr_import_channel/decoder">解码器</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-header>
