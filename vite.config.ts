@@ -11,5 +11,14 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
       '@lib': fileURLToPath(new URL('./src/lib/frontend-library/src', import.meta.url))
     }
+  },
+  server: {
+    proxy: {
+      '^/qr_fountain_channel/(mdl|api|job)': {
+        target: 'http://218.242.30.111:6031',
+        ws: true,
+        changeOrigin: true
+      }
+    }
   }
 })

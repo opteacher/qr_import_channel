@@ -1,23 +1,16 @@
 <template>
   <a-layout class="h-full">
     <a-layout-header class="bg-white">
-      <!-- <a-upload
+      <a-upload
         name="file"
-        :action="onFileUpload"
         :showUploadList="false"
-        :customRequest="() => ''"
+        action="/qr_fountain_channel/api/v1/file/upload"
       >
-        <a-button type="primary">
-          <template #icon><upload-outlined /></template>
-          上传文件夹
-        </a-button>
-      </a-upload> -->
-      <a-space>
         <a-button type="primary">
           <template #icon><UploadOutlined /></template>
           上传文件
         </a-button>
-      </a-space>
+      </a-upload>
       <a-space v-if="tsfFile" class="ml-5">
         <!-- <a-typography-title :level="4">{{ tsfFile.name }}</a-typography-title> -->
         <a-typography-text strong>{{ tsfFile.name }}</a-typography-text>
