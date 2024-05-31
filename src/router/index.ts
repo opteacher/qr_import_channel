@@ -9,6 +9,10 @@ const routes: Array<RouteRecordRaw> = [
     redirect: '/qr_import_channel/home'
   },
   {
+    path: '/qr_import_channel/',
+    redirect: '/qr_import_channel/home'
+  },
+  {
     path: '/qr_import_channel/home',
     name: 'Home',
     component: Home
