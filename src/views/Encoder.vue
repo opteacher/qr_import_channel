@@ -1,6 +1,6 @@
 <template>
-  <a-layout class="h-full">
-    <a-layout-header class="bg-white">
+  <div class="space-y-2" ref="page">
+    <a-space>
       <a-upload
         name="file"
         :showUploadList="false"
@@ -11,51 +11,23 @@
           上传文件
         </a-button>
       </a-upload>
-      <a-space v-if="tsfFile" class="ml-5">
-        <!-- <a-typography-title :level="4">{{ tsfFile.name }}</a-typography-title> -->
-        <a-typography-text strong>{{ tsfFile.name }}</a-typography-text>
-        <a-progress
-          class="w-96"
-          :percent="(sliceCount / (totalSlices || 1)) * 100"
-          :format="() => `${sliceCount} / ${totalSlices}`"
-        />
-      </a-space>
-    </a-layout-header>
-    <a-layout class="h-full">
-      <a-layout-sider :width="400" theme="light" class="relative">
-        <a-list
-          class="h-full absolute top-0 bottom-0 left-0 right-0 overflow-auto"
-          item-layout="horizontal"
-          :data-source="files"
-        >
-          <template #renderItem="{ item: file }">
-            <a-list-item
-              class="hover:bg-gray-300 hover:cursor-pointer"
-              @click="() => onFileClick(file)"
-            >
-              <a-space>
-                <a-tag :color="file.kind === 'file' ? 'orange' : 'cyan'">{{ file.kind }}</a-tag>
-                <a-typography-text
-                  :class="{
-                    'text-primary font-bold':
-                      file.kind === 'file' && tsfFile && tsfFile.name === file.name
-                  }"
-                >
-                  {{ file.name }}
-                </a-typography-text>
-                <a-typography-text type="secondary">
-                  {{ file.kind === 'file' ? `共${file.fileSize}字节` : `含${file.fileNum}个文件` }}
-                </a-typography-text>
-              </a-space>
-            </a-list-item>
-          </template>
-        </a-list>
-      </a-layout-sider>
-      <a-layout-content>
-        <a-qrcode v-if="data" :size="500" error-level="H" :value="data" />
-      </a-layout-content>
-    </a-layout>
-  </a-layout>
+      <a-typography-text v-if="tsfFile" strong>{{ tsfFile.name }}</a-typography-text>
+    </a-space>
+    <div v-if="tsfFile" class="flex space-x-1.5">
+      <a-progress
+        class="flex-1"
+        :percent="(sliceCount / (totalSlices || 1)) * 100"
+        :format="() => `${sliceCount} / ${totalSlices}`"
+        :showInfo="false"
+      />
+      <a-button type="primary" danger size="small" @click="() => onFileClick(null)">
+        <template #icon>
+          <CloseOutlined />
+        </template>
+      </a-button>
+    </div>
+    <a-qrcode v-if="data" :size="qrCodeSize" error-level="H" :value="data" />
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -67,8 +39,8 @@ import {
   marshalDescriptor,
   marshalSlice
 } from '@/FileUtils'
-import { UploadOutlined } from '@ant-design/icons-vue'
-import { onMounted, ref } from 'vue'
+import { UploadOutlined, CloseOutlined } from '@ant-design/icons-vue'
+import { computed, onMounted, ref } from 'vue'
 import mqtt from 'mqtt'
 
 const tsfFile = ref<File | null>(null)
@@ -80,7 +52,8 @@ const count = ref<number>(0)
 const totalSlices = ref<number>(0)
 const sliceCount = ref<number>(0)
 const data = ref<string>('')
-const files = ref<(FileSystemHandle & { fileNum?: number; fileSize?: number })[]>([])
+const page = ref<HTMLElement | null>(null)
+const qrCodeSize = computed<number | undefined>(() => page.value?.clientWidth)
 
 onMounted(async () => {
   setInterval(async () => {
@@ -127,9 +100,9 @@ function initMqtt() {
     }
   })
 }
-async function onFileClick(file: File) {
+async function onFileClick(file: File | null) {
   tsfFile.value = file
-  sha256.value = await hashFileSHA256B64(tsfFile.value)
+  sha256.value = file ? await hashFileSHA256B64(file) : ''
   processing.value = false
   count.value = 0
   totalSlices.value = 0

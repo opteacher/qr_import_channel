@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts">
-import { PropType, computed, onMounted, ref } from 'vue'
+import { PropType, computed, onMounted, ref, watch } from 'vue'
 import { assemblePayload, determinedPercentage as calculateDeterminedPercentage } from '@/FileUtils'
 import { calculateBitsPerSecond, sliceReducerState } from '@/Decorder'
 
@@ -48,6 +48,13 @@ onMounted(() => {
     ? (Date.now() - props.state.lastSliceReceivedOn) / 1000
     : -1
 })
+watch(
+  () => determinedPercentage,
+  () => {
+    console.log(determinedPercentage.value)
+  },
+  { deep: true }
+)
 
 function getPayload(): Blob | null {
   return props.state.descriptor ? assemblePayload(props.state.store, props.state.descriptor) : null

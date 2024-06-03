@@ -1,48 +1,41 @@
 <template>
-  <a-layout class="h-full flex flex-col">
-    <a-layout-header>
-      <div class="logo" />
-      <a-menu
-        v-model:selectedKeys="current"
-        theme="dark"
-        mode="horizontal"
-        :style="{ lineHeight: '64px' }"
-      >
-        <a-menu-item key="Home">
-          <router-link to="/qr_import_channel/home">主页</router-link>
-        </a-menu-item>
-        <a-menu-item key="Encoder">
-          <router-link to="/qr_import_channel/encoder">编码器</router-link>
-        </a-menu-item>
-        <a-menu-item key="Decoder">
-          <router-link to="/qr_import_channel/decoder">解码器</router-link>
-        </a-menu-item>
-      </a-menu>
-    </a-layout-header>
-    <a-layout-content class="flex-1 px-12 py-3">
+  <div class="h-full flex flex-col">
+    <a-page-header
+      :title="$router.currentRoute.value.meta.dspName"
+      class="site-page-header"
+      :sub-title="$router.currentRoute.value.meta.desc"
+      :avatar="{ icon: createVNode(HomeOutlined) }"
+    >
+      <template #extra>
+        <a-dropdown key="more">
+          <a-button :style="{ border: 'none', padding: 0 }">
+            <EllipsisOutlined :style="{ fontSize: '20px', verticalAlign: 'top' }" />
+          </a-button>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item>
+                <router-link to="/qr_import_channel/home">主页</router-link>
+              </a-menu-item>
+              <a-menu-item>
+                <router-link to="/qr_import_channel/encoder">编码器</router-link>
+              </a-menu-item>
+              <a-menu-item>
+                <router-link to="/qr_import_channel/decoder">解码器</router-link>
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
+      </template>
+    </a-page-header>
+    <div class="flex-1 px-10">
       <router-view />
-    </a-layout-content>
-  </a-layout>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
-import { useRouter } from 'vue-router';
-
-const current = ref<string[]>(['Home'])
-const router = useRouter()
-
-watch(
-  () => current.value,
-  () => {
-    router.push(current.value[0].toLowerCase())
-  }
-)
-watch(() => router.currentRoute.value.name, (rName: any) => {
-  if (current.value[0] !== rName) {
-    current.value = [rName]
-  }
-})
+import { createVNode } from 'vue'
+import { EllipsisOutlined, HomeOutlined } from '@ant-design/icons-vue'
 </script>
 
 <style scoped>
