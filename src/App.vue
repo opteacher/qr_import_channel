@@ -4,12 +4,36 @@
       :title="$router.currentRoute.value.meta.dspName"
       class="site-page-header"
       :sub-title="$router.currentRoute.value.meta.desc"
-      :avatar="{ icon: createVNode(HomeOutlined) }"
+      :avatar="{ icon: createVNode(HomeOutlined), shape: 'square' }"
     >
       <template #extra>
-        <a-dropdown key="more">
-          <a-button :style="{ border: 'none', padding: 0 }">
-            <EllipsisOutlined :style="{ fontSize: '20px', verticalAlign: 'top' }" />
+        <div class="hidden space-x-2 sm:ml-6 sm:block">
+          <a-button
+            :type="$router.currentRoute.value.name === 'Home' ? 'primary' : 'default'"
+            @click="() => $router.push('/qr_import_channel/home')"
+          >
+            <template #icon><HomeOutlined /></template>
+            主页
+          </a-button>
+          <a-button
+            :type="$router.currentRoute.value.name === 'Encoder' ? 'primary' : 'default'"
+            @click="() => $router.push('/qr_import_channel/encoder')"
+          >
+            <template #icon><QrcodeOutlined /></template>
+            编码器
+          </a-button>
+          <a-button
+            :type="$router.currentRoute.value.name === 'Decoder' ? 'primary' : 'default'"
+            @click="() => $router.push('/qr_import_channel/decoder')"
+          >
+            <template #icon><ScanOutlined /></template>
+            解码器
+          </a-button>
+        </div>
+
+        <a-dropdown class="sm:hidden" key="more">
+          <a-button class="p-0 border-0">
+            <EllipsisOutlined class="align-top text-xl" />
           </a-button>
           <template #overlay>
             <a-menu>
@@ -35,7 +59,7 @@
 
 <script setup lang="ts">
 import { createVNode } from 'vue'
-import { EllipsisOutlined, HomeOutlined } from '@ant-design/icons-vue'
+import { EllipsisOutlined, HomeOutlined, QrcodeOutlined, ScanOutlined } from '@ant-design/icons-vue'
 </script>
 
 <style scoped>

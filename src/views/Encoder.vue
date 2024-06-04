@@ -94,10 +94,11 @@ function initMqtt() {
     client.subscribe('upload_file', err => (err ? console.error(err) : undefined))
   })
   client.on('error', e => console.error(JSON.stringify(e)))
-  client.on('message', (topic: string, message: Buffer) => {
-    if (topic === 'upload_file') {
-      onFileClick(new File([message], 'test.jpg'))
-    }
+  client.on('message', (_topic: string, message: Buffer) => {
+    console.log(JSON.parse(message.toString()))
+    // if (topic === 'upload_file') {
+    //   onFileClick(new File([message], 'test.jpg'))
+    // }
   })
 }
 async function onFileClick(file: File | null) {
