@@ -4,6 +4,7 @@
       <a-upload
         name="file"
         :showUploadList="false"
+        :data="(file: File) => ({ file_real_name: file.name })"
         action="/qr_fountain_channel/api/v1/file/upload"
       >
         <a-button type="primary">
@@ -26,7 +27,7 @@
         </template>
       </a-button>
     </div>
-    <a-qrcode v-if="data" :size="qrCodeSize" error-level="H" :value="data" />
+    <a-qrcode v-if="data" :size="qrSize" error-level="H" :value="data" />
   </div>
 </template>
 
@@ -40,8 +41,9 @@ import {
   marshalSlice
 } from '@/FileUtils'
 import { UploadOutlined, CloseOutlined } from '@ant-design/icons-vue'
-import { computed, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import mqtt from 'mqtt'
+import axios from 'axios'
 
 const tsfFile = ref<File | null>(null)
 const sha256 = ref<string>('')
@@ -53,7 +55,7 @@ const totalSlices = ref<number>(0)
 const sliceCount = ref<number>(0)
 const data = ref<string>('')
 const page = ref<HTMLElement | null>(null)
-const qrCodeSize = computed<number | undefined>(() => page.value?.clientWidth)
+const qrSize = ref<number>()
 
 onMounted(async () => {
   setInterval(async () => {
@@ -94,14 +96,19 @@ function initMqtt() {
     client.subscribe('upload_file', err => (err ? console.error(err) : undefined))
   })
   client.on('error', e => console.error(JSON.stringify(e)))
-  client.on('message', (_topic: string, message: Buffer) => {
-    console.log(JSON.parse(message.toString()))
-    // if (topic === 'upload_file') {
-    //   onFileClick(new File([message], 'test.jpg'))
-    // }
+  client.on('message', async (topic: string, message: Buffer) => {
+    if (topic === 'upload_file') {
+      const strMsg = message.toString().trim()
+      const flInfo = JSON.parse(strMsg.slice(0, -2))
+      console.log(flInfo)
+      const resp = await axios.get(flInfo.url)
+      const blob = new Blob([resp.data], { type: resp.headers['content-type'] })
+      onFileClick(new File([blob], flInfo.name))
+    }
   })
 }
 async function onFileClick(file: File | null) {
+  qrSize.value = page.value?.clientWidth
   tsfFile.value = file
   sha256.value = file ? await hashFileSHA256B64(file) : ''
   processing.value = false
