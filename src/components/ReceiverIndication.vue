@@ -32,6 +32,7 @@
 import { PropType, computed, onMounted, ref, watch } from 'vue'
 import { assemblePayload, determinedPercentage as calculateDeterminedPercentage } from '@/FileUtils'
 import { calculateBitsPerSecond, sliceReducerState } from '@/Decorder'
+import { reqPost } from '@lib/utils'
 
 const props = defineProps({
   state: { type: Object as PropType<sliceReducerState>, required: true },
@@ -50,8 +51,24 @@ onMounted(() => {
 })
 watch(
   () => determinedPercentage,
-  () => {
-    console.log(determinedPercentage.value)
+  async () => {
+    if (determinedPercentage.value >= 1) {
+      const file_real_name = props.state.descriptor?.name as string
+      const formData = new FormData()
+      formData.append('file_real_name', file_real_name)
+      formData.append('file', getPayload() as Blob)
+      console.log(formData.entries())
+      await reqPost('file', formData, {
+        type: 'api',
+        project: 'qr_fountain_channel',
+        action: 'receive',
+        axiosConfig: {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      })
+    }
   },
   { deep: true }
 )

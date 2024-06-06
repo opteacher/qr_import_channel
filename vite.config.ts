@@ -5,7 +5,7 @@ import basicSsl from '@vitejs/plugin-basic-ssl'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), basicSsl()],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -13,7 +13,6 @@ export default defineConfig({
     }
   },
   server: {
-    port: 5174,
     proxy: {
       '^/qr_fountain_channel/(mdl|api|job)': {
         target: 'http://218.242.30.111:6031',

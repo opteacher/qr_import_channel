@@ -45,4 +45,8 @@ axios.defaults.paramsSerializer = function (params: any): string {
   return ret.join('&')
 }
 
+if (import.meta.env.PROD) {
+  axios.defaults.baseURL = `http://${import.meta.env.VITE_BACK_HOST}:${import.meta.env.VITE_BACK_PORT}`
+}
+
 createApp(App).use(pinia).use(router).use(Antd).use(MyLib).mount('#app')

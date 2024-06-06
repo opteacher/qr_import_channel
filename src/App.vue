@@ -1,10 +1,9 @@
 <template>
   <div class="h-full flex flex-col">
     <a-page-header
-      :title="$router.currentRoute.value.meta.dspName"
+      :title="$router.currentRoute.value.meta.label"
       class="site-page-header"
       :sub-title="$router.currentRoute.value.meta.desc"
-      :avatar="{ icon: createVNode(HomeOutlined), shape: 'square' }"
     >
       <template #extra>
         <div class="hidden space-x-2 sm:ml-6 sm:block">
@@ -58,7 +57,6 @@
 </template>
 
 <script setup lang="ts">
-import { createVNode } from 'vue'
 import { EllipsisOutlined, HomeOutlined, QrcodeOutlined, ScanOutlined } from '@ant-design/icons-vue'
 </script>
 

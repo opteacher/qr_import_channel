@@ -5,7 +5,7 @@
         name="file"
         :showUploadList="false"
         :data="(file: File) => ({ file_real_name: file.name })"
-        action="/qr_fountain_channel/api/v1/file/upload"
+        :action="uploadURL"
       >
         <a-button type="primary">
           <template #icon><UploadOutlined /></template>
@@ -41,10 +41,17 @@ import {
   marshalSlice
 } from '@/FileUtils'
 import { UploadOutlined, CloseOutlined } from '@ant-design/icons-vue'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import mqtt from 'mqtt'
 import axios from 'axios'
 
+const uploadURL = computed(() =>
+  [
+    import.meta.env.VITE_BACK_HOST ? `http://${import.meta.env.VITE_BACK_HOST}` : '',
+    import.meta.env.VITE_BACK_PORT ? `:${import.meta.env.VITE_BACK_PORT}` : '',
+    '/qr_fountain_channel/api/v1/file/upload'
+  ].join('')
+)
 const tsfFile = ref<File | null>(null)
 const sha256 = ref<string>('')
 const fps = 15

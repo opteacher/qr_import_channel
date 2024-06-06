@@ -149,8 +149,10 @@ export const useDecoder = (state: Ref<sliceReducerState>): DecoderResult => {
     } catch (err) {}
     try {
       const unmarshaledDescriptor = unmarshalDescriptor(data)
-      state.value = sliceReducer(state.value, { type: 'SET_DESCRIPTOR', descriptor: unmarshaledDescriptor })
-      console.log(state)
+      state.value = sliceReducer(state.value, {
+        type: 'SET_DESCRIPTOR',
+        descriptor: unmarshaledDescriptor
+      })
     } catch (err) {}
   }
 
@@ -169,6 +171,7 @@ export const useDecoder = (state: Ref<sliceReducerState>): DecoderResult => {
     determinedSlices: () => determinedSliceIndices(state.value.store),
     callbackFunction: callbackFunction,
     rawDataRateInBitsPerSeconds: rawDataRate,
-    lastSliceReceivedOn: state.value.lastSliceReceivedOn === 0 ? undefined : state.value.lastSliceReceivedOn
+    lastSliceReceivedOn:
+      state.value.lastSliceReceivedOn === 0 ? undefined : state.value.lastSliceReceivedOn
   }
 }

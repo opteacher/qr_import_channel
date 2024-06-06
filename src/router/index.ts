@@ -17,7 +17,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Home',
     component: Home,
     meta: {
-      dspName: '主页',
+      icon: 'HomeOutlined',
+      label: '主页',
       desc: '显示当前传输任务和最近历史记录'
     }
   },
@@ -26,7 +27,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Encoder',
     component: Encoder,
     meta: {
-      dspName: '编码页',
+      icon: 'QrcodeOutlined',
+      label: '编码页',
       desc: '上传文件进行编码传输'
     }
   },
@@ -35,7 +37,8 @@ const routes: Array<RouteRecordRaw> = [
     name: 'Decoder',
     component: Decoder,
     meta: {
-      dspName: '解码页',
+      icon: 'ScanOutlined',
+      label: '解码页',
       desc: '打开摄像头对准发送端的二维码，接受传输的文件'
     }
   }

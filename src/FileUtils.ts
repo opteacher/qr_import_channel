@@ -38,7 +38,7 @@ export const printStoreAsMatrix = (store: SliceStore) => {
 }
 
 export const newStore = (size: number): SliceStore => {
-  return [...Array(size)].map(e => {
+  return [...Array(size)].map(() => {
     return { identifiers: [], payload: new Uint8Array(0) }
   })
 }
@@ -125,7 +125,7 @@ export const getNextPermutation = (file: File, sliceSize: number): number[] => {
   const result = []
   const maxSliceCount = getMaxSliceCount(file, sliceSize)
   const allKeys = Array.from(Array(maxSliceCount).keys())
-  const randomSorted = allKeys.sort((a, b) => Math.random() - 0.5)
+  const randomSorted = allKeys.sort(() => Math.random() - 0.5)
   for (let i = 0; i < Math.min(sampleSolitonDistributionK(), maxSliceCount); i++) {
     result.push(randomSorted[i])
   }
@@ -219,7 +219,7 @@ export const unmarshalSlice = (data: string): Slice => {
   if (!data.startsWith('P:')) {
     throw Error('Not a data slice')
   } else {
-    const [, sliceIdentifiers, payload, ...rest] = data.split(':')
+    const [, sliceIdentifiers, payload] = data.split(':')
     return { identifiers: unmarshalSliceIdentifiers(sliceIdentifiers), payload: b64decode(payload) }
   }
 }
