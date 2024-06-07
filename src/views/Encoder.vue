@@ -5,7 +5,7 @@
         name="file"
         :showUploadList="false"
         :data="(file: File) => ({ file_real_name: file.name })"
-        :action="uploadURL"
+        :action="sendURL"
       >
         <a-button type="primary">
           <template #icon><UploadOutlined /></template>
@@ -45,11 +45,11 @@ import { computed, onMounted, ref } from 'vue'
 import mqtt from 'mqtt'
 import axios from 'axios'
 
-const uploadURL = computed(() =>
+const sendURL = computed(() =>
   [
     import.meta.env.VITE_BACK_HOST ? `http://${import.meta.env.VITE_BACK_HOST}` : '',
     import.meta.env.VITE_BACK_PORT ? `:${import.meta.env.VITE_BACK_PORT}` : '',
-    '/qr_fountain_channel/api/v1/file/upload'
+    '/qr_fountain_channel/api/v1/file/send'
   ].join('')
 )
 const tsfFile = ref<File | null>(null)
@@ -100,11 +100,11 @@ function initMqtt() {
   )
   client.on('connect', res => {
     console.log('连接成功！', JSON.stringify(res))
-    client.subscribe('upload_file', err => (err ? console.error(err) : undefined))
+    client.subscribe('send_file', err => (err ? console.error(err) : undefined))
   })
   client.on('error', e => console.error(JSON.stringify(e)))
   client.on('message', async (topic: string, message: Buffer) => {
-    if (topic === 'upload_file') {
+    if (topic === 'send_file') {
       const strMsg = message.toString().trim()
       const flInfo = JSON.parse(strMsg.slice(0, -2))
       console.log(flInfo)
