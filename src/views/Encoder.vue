@@ -49,7 +49,7 @@ const sendURL = computed(() =>
   [
     import.meta.env.VITE_BACK_HOST ? `http://${import.meta.env.VITE_BACK_HOST}` : '',
     import.meta.env.VITE_BACK_PORT ? `:${import.meta.env.VITE_BACK_PORT}` : '',
-    '/qr_fountain_channel/api/v1/file/send'
+    `/${import.meta.env.VITE_PJT}/api/v1/file/send`
   ].join('')
 )
 const tsfFile = ref<File | null>(null)
@@ -108,7 +108,13 @@ function initMqtt() {
       const strMsg = message.toString().trim()
       const flInfo = JSON.parse(strMsg.slice(0, -2))
       console.log(flInfo)
-      const resp = await axios.get(flInfo.url)
+      const resp = await axios.get(
+        [
+          import.meta.env.VITE_MINIO_HOST ? 'http://' + import.meta.env.VITE_MINIO_HOST : '',
+          import.meta.env.VITE_MINIO_PORT ? ':' + import.meta.env.VITE_MINIO_PORT : '',
+          flInfo.path
+        ].join('')
+      )
       const blob = new Blob([resp.data], { type: resp.headers['content-type'] })
       onFileClick(new File([blob], flInfo.name))
     }

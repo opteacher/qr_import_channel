@@ -56,7 +56,7 @@ watch(
       const recvURL = [
         import.meta.env.VITE_BACK_HOST ? `http://${import.meta.env.VITE_BACK_HOST}` : '',
         import.meta.env.VITE_BACK_PORT ? `:${import.meta.env.VITE_BACK_PORT}` : '',
-        '/qr_fountain_channel/api/v1/file/receive'
+        `/${import.meta.env.VITE_PJT}/api/v1/file/receive`
       ].join('')
       const file_real_name = props.state.descriptor?.name as string
       const formData = new FormData()

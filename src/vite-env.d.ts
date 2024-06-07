@@ -1,5 +1,8 @@
 /// <reference types="vite/client" />
 interface ImportMetaEnv {
+  readonly VITE_PJT: string
+  readonly VITE_MINIO_HOST: string
+  readonly VITE_MINIO_PORT: number
   readonly VITE_BACK_HOST: string
   readonly VITE_BACK_PORT: number
   readonly VITE_MQTT_HOST: string

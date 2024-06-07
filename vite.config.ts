@@ -18,6 +18,11 @@ export default defineConfig({
         target: 'http://218.242.30.111:6031',
         ws: true,
         changeOrigin: true
+      },
+      '^/qr-fountain-channel': {
+        target: 'http://218.242.30.111:8480',
+        ws: true,
+        changeOrigin: true
       }
     }
   }
