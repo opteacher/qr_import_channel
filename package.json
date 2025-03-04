@@ -12,7 +12,7 @@
     "@ant-design/icons-vue": "^7.0.1",
     "@borderless/base64": "^1.0.1",
     "@zxing/browser": "^0.1.4",
-    "@zxing/library": "^0.21.0",
+    "@zxing/library": "^0.20.0",
     "ant-design-vue": "^4.1.2",
     "axios": "^1.6.7",
     "codemirror": "^5.65.16",
