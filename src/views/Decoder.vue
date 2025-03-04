@@ -79,7 +79,7 @@ onMounted(async () => {
       {
         width: pageSize?.width,
         height: pageSize?.width,
-        facingMode: { exact: 'environment' },
+        // facingMode: { exact: 'environment' },
         deviceId: selMdaDev.value
       },
       vdoReceiver,

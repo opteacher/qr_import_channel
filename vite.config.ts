@@ -15,12 +15,12 @@ export default defineConfig({
   server: {
     proxy: {
       '^/qr_fountain_channel/(mdl|api|job)': {
-        target: 'http://218.242.30.111:6031',
+        target: 'http://192.168.1.11:4009',
         ws: true,
         changeOrigin: true
       },
       '^/qr-fountain-channel': {
-        target: 'http://218.242.30.111:8480',
+        target: 'http://192.168.1.11:9000',
         ws: true,
         changeOrigin: true
       }
